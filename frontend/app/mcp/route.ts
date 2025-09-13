@@ -1,5 +1,6 @@
 import { createMcpHandler } from "mcp-handler";
 import { z } from "zod";
+import { searchBooks } from "@/lib/searchBooks";
 
 // StreamableHttp server
 const handler = createMcpHandler(
@@ -22,7 +23,7 @@ const handler = createMcpHandler(
         book_title: z.string(),
       },
       async ({ book_title }) => ({
-        content: [{ type: "text", text: `Tool search_books: ${book_title}` }],
+        content: await searchBooks(book_title),
       }),
     );
 
@@ -34,7 +35,7 @@ const handler = createMcpHandler(
           description: "Echo a message",
         },
         search_books: {
-          description: "Search for books",
+          description: "Search books by title",
         },
       },
     },

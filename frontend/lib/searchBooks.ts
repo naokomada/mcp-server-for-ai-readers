@@ -1,6 +1,8 @@
 // シンプルな検索処理のスタブ。
 // 実サービス接続やDB検索が必要になった場合は、このモジュールを拡張してください。
 
+import { searchNftInfo, searchNftCollection } from "./searchNfts";
+
 export type McpTextContent = { type: "text"; text: string };
 
 /**
@@ -14,4 +16,25 @@ export async function searchBooks(bookTitle: string): Promise<McpTextContent[]> 
     : "Book search result: (no title provided)";
 
   return [{ type: "text", text }];
+}
+
+/**
+ * NFT情報を検索する関数（searchNfts.tsモジュールのラッパー）
+ * @param contractAddress - NFTコントラクトのアドレス
+ * @param tokenId - 取得したいNFTのトークンID
+ * @returns Promise<McpTextContent[]> - NFT情報をMCPテキストコンテンツ形式で返却
+ */
+export async function searchNft(contractAddress: string, tokenId: string): Promise<McpTextContent[]> {
+  console.log(`[searchBooks.searchNft] Delegating to searchNfts module: ${contractAddress}, ${tokenId}`);
+  return await searchNftInfo(contractAddress, tokenId);
+}
+
+/**
+ * NFTコレクション情報を検索する関数（searchNfts.tsモジュールのラッパー）
+ * @param contractAddress - NFTコントラクトのアドレス
+ * @returns Promise<McpTextContent[]> - コレクション情報をMCPテキストコンテンツ形式で返却
+ */
+export async function searchNftCollectionInfo(contractAddress: string): Promise<McpTextContent[]> {
+  console.log(`[searchBooks.searchNftCollectionInfo] Delegating to searchNfts module: ${contractAddress}`);
+  return await searchNftCollection(contractAddress);
 }

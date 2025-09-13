@@ -22,6 +22,7 @@ route.ts のオプションで disableSse: false にする。
 local usage
 node scripts/test-streamable-http-client.mjs http://localhost:3000 echo '{"message":"gm from cli"}'
 node scripts/test-streamable-http-client.mjs http://localhost:3000 search_books '{"book_title":"book from cli"}'
+node scripts/test-streamable-http-client.mjs http://localhost:3000 search_books '{"book_title":"nft:mainnet:0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85:1"}'
 
 
 live sample

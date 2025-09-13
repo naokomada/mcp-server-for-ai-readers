@@ -30,3 +30,12 @@ cd frontend/
 node scripts/test-streamable-http-client.mjs https://mcp-server-for-ai-readers.vercel.app
 node scripts/test-streamable-http-client.mjs https://mcp-server-for-ai-readers.vercel.app echo '{"message":"gm from cli"}'
 node scripts/test-streamable-http-client.mjs https://mcp-server-for-ai-readers.vercel.app search_books '{"book_title":"book from cli"}'
+
+contract
+```bash
+cd contract
+cp .env.example .env
+npm install
+npx hardhat compile
+npx hardhat getState --network base_sepolia --tokenid 1
+```

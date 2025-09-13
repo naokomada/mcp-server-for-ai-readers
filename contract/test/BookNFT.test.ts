@@ -42,4 +42,20 @@ describe("BookNFT", function () {
       expect(await book.read.symbol()).to.equal("BOOK");
     });
   });
+
+  describe("Minting", function () {
+    it("Should mint a new token", async function () {
+      const { book } = await loadFixture(deployBookNFTFixture);
+
+      const bookTitle = "My First Book";
+      const bookUrl = "https://example.com/my_first_book";
+
+      await book.write.mint([bookTitle, bookUrl]);
+
+      const tokenId = 0n;
+      expect(await book.read.getBookTitle([tokenId])).to.equal(bookTitle);
+      expect(await book.read.getBookUrl([tokenId])).to.equal(bookUrl);
+    })
+  });
+
 });

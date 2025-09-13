@@ -19,4 +19,6 @@ route.ts のオプションで disableSse: false にする。
 
 
 live sample
-
+cd frontend/
+node scripts/test-streamable-http-client.mjs https://mcp-server-for-ai-readers.vercel.app
+node scripts/test-streamable-http-client.mjs https://mcp-server-for-ai-readers.vercel.app echo '{"message":"gm from cli"}'

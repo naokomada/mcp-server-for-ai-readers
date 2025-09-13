@@ -37,5 +37,9 @@ cd contract
 cp .env.example .env
 npm install
 npx hardhat compile
+
+# deploy contract
+npx hardhat ignition deploy ignition/modules/BookNFT.ts --network sepolia
+
 npx hardhat getState --network base_sepolia --tokenid 1
 ```

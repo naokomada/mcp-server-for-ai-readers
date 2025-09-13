@@ -14,12 +14,27 @@ const handler = createMcpHandler(
         content: [{ type: "text", text: `Tool echo: ${message}` }],
       }),
     );
+
+    server.tool(
+      "search_books",
+      "description",
+      {
+        book_title: z.string(),
+      },
+      async ({ book_title }) => ({
+        content: [{ type: "text", text: `Tool search_books: ${book_title}` }],
+      }),
+    );
+
   },
   {
     capabilities: {
       tools: {
         echo: {
           description: "Echo a message",
+        },
+        search_books: {
+          description: "Search for books",
         },
       },
     },

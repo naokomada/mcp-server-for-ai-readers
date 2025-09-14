@@ -26,4 +26,12 @@ contract BookNFT is ERC721 {
         require(_ownerOf(tokenId) != address(0), "BookNFT: query for nonexistent token");
         return _bookUrls[tokenId];
     }
+
+    function getAllBookTitles() external view returns (string[] memory) {
+        string[] memory titles = new string[](_nextTokenId);
+        for (uint256 i = 0; i < _nextTokenId; i++) {
+            titles[i] = _bookTitles[i];
+        }
+        return titles;
+    }
 }

@@ -58,4 +58,28 @@ describe("BookNFT", function () {
     })
   });
 
+  describe("Get All Book Titles", function () {
+    it("Should return all book titles", async function () {
+      const { book } = await loadFixture(deployBookNFTFixture);
+
+      const titles = [
+        "Book One",
+        "Book Two",
+        "Book Three"
+      ];
+      const urls = [
+        "https://example.com/book_one",
+        "https://example.com/book_two",
+        "https://example.com/book_three"
+      ];
+
+      for (let i = 0; i < titles.length; i++) {
+        await book.write.mint([titles[i], urls[i]]);
+      }
+
+      const allTitles = await book.read.getAllBookTitles();
+      expect(allTitles).to.deep.equal(titles);
+    });
+  });
+
 });

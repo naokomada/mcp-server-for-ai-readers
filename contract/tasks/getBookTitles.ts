@@ -26,7 +26,7 @@ task("getBookTitles", "本のタイトルを取得するタスク")
     console.log(`✅ Current value is: ${resTitle.toString()}, ${resUrl.toString()}`);
 
     // 6. すべてのタイトルを表示
-    const resAllTitles: string[] = await bookContract.read.getAllBookTitles();    
+    const resAllTitles: string[] = await bookContract.read.getAllBookTitles();
 
     console.log(`✅ All book titles:`);
     resAllTitles.forEach((title) => {

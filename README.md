@@ -20,10 +20,10 @@ route.ts のオプションで disableSse: false にする。
 
 
 local usage
+```bash
 node scripts/test-streamable-http-client.mjs http://localhost:3000 echo '{"message":"gm from cli"}'
 node scripts/test-streamable-http-client.mjs http://localhost:3000 search_books '{"book_title":"book from cli"}'
-node scripts/test-streamable-http-client.mjs http://localhost:3000 search_books '{"book_title":"nft:mainnet:0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85:1"}'
-
+```
 
 live sample
 cd frontend/
@@ -45,7 +45,7 @@ npx hardhat compile
 npx hardhat ignition deploy ignition/modules/BookNFT.ts --network sepolia
 
 # add book information
-npx hardhat addBook --network sepolia --title "Book One" --url "https://example.com/book_one"
+npx hardhat addBook --network sepolia --title "Book Two" --url "https://example.com/book_two"
 
 # check books information
 npx hardhat getBookTitles --network sepolia --tokenid 1

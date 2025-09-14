@@ -1,7 +1,7 @@
 // シンプルな検索処理のスタブ。
 // 実サービス接続やDB検索が必要になった場合は、このモジュールを拡張してください。
 
-import { searchNftInfo, searchNftCollection } from "./searchNfts";
+import { fetchAllBookTitles, fetchBookURL } from "./fetchBookNFT";
 
 export type McpTextContent = { type: "text"; text: string };
 
@@ -11,48 +11,58 @@ export type McpTextContent = { type: "text"; text: string };
  */
 export async function searchBooks(bookTitle: string): Promise<McpTextContent[]> {
   console.log(`[searchBooks] Called with bookTitle: ${bookTitle}`);
-  
-  // const normalized = bookTitle?.trim();
-  
-  // if (!normalized) {
-  //   return [{ type: "text", text: "Book search result: (no title provided)" }];
-  // }
 
+  try {
+    const bookTitles = await fetchAllBookTitles();
 
+    console.log(`[searchBooks] Fetched book titles: ${bookTitles.join(", ")}`);
 
-  // try {
-  //   const nftResults = await searchNftCollectionInfo(normalized);
-  //   results.push(...nftResults);
-  // } catch (error) {
-  //   console.error(`[searchBooks] Error searching NFT collection:`, error);
-  //   results.push({
-  //     type: "text",
-  //     text: `NFT collection search failed: ${error instanceof Error ? error.message : 'Unknown error'}`
-  //   });
-  // }
+    // bookTitleに合致する要素とそのインデックスを検索
+    const matchingBooks: { index: number; title: string }[] = [];
+    
+    bookTitles.forEach((title, index) => {
+      // 完全一致または部分一致で検索
+      if (title.toLowerCase().includes(bookTitle.toLowerCase())) {
+        matchingBooks.push({ index, title });
+      }
+    });
 
-  const results: McpTextContent[] = [{ type: "text", text: "Book search result: (no title provided)" }];
+    // 結果を返却
+    if (matchingBooks.length === 0) {
+      return [{ 
+        type: "text", 
+        text: `No books found matching "${bookTitle}". Available titles: ${bookTitles.join(", ")}` 
+      }];
+    }
 
-  return results;
-}
+    const bookUrls = await Promise.all(
+      matchingBooks.map(match => fetchBookURL(BigInt(match.index)))
+    );
 
-/**
- * NFT情報を検索する関数（searchNfts.tsモジュールのラッパー）
- * @param contractAddress - NFTコントラクトのアドレス
- * @param tokenId - 取得したいNFTのトークンID
- * @returns Promise<McpTextContent[]> - NFT情報をMCPテキストコンテンツ形式で返却
- */
-export async function searchNft(contractAddress: string, tokenId: string): Promise<McpTextContent[]> {
-  console.log(`[searchBooks.searchNft] Delegating to searchNfts module: ${contractAddress}, ${tokenId}`);
-  return await searchNftInfo(contractAddress, tokenId);
-}
+    console.log(`[searchBooks] Fetched book titles: ${bookTitles.join(", ")}`);
+    console.log(`[searchBooks] Matching books: ${matchingBooks.map(m => m.title).join(", ")}`);
+    console.log(`[searchBooks] Book URLs: ${bookUrls.join(" | ")}`);
 
-/**
- * NFTコレクション情報を検索する関数（searchNfts.tsモジュールのラッパー）
- * @param contractAddress - NFTコントラクトのアドレス
- * @returns Promise<McpTextContent[]> - コレクション情報をMCPテキストコンテンツ形式で返却
- */
-export async function searchNftCollectionInfo(contractAddress: string): Promise<McpTextContent[]> {
-  console.log(`[searchBooks.searchNftCollectionInfo] Delegating to searchNfts module: ${contractAddress}`);
-  return await searchNftCollection(contractAddress);
+    const matchResults = matchingBooks.map((match, i) => 
+      //`Index ${match.index}: ${match.title} URL: ${bookUrls[i] || "(not found)"}`
+      `${bookUrls[i] || "(not found)"}`
+    );
+
+    // return [{ 
+    //   type: "text", 
+    //   text: `Found ${matchingBooks.length} matching book(s) for "${bookTitle}": ${matchResults}` 
+    // }];
+
+    return [{ 
+      type: "text", 
+      text: `${matchResults}` 
+    }];
+
+  } catch (error) {
+    console.error(`[searchBooks] Error searching books:`, error);
+    return [{ 
+      type: "text", 
+      text: `Book search failed: ${error instanceof Error ? error.message : 'Unknown error'}` 
+    }];
+  }
 }

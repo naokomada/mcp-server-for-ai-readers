@@ -44,12 +44,18 @@ export async function searchBooks(bookTitle: string): Promise<McpTextContent[]> 
     console.log(`[searchBooks] Book URLs: ${bookUrls.join(" | ")}`);
 
     const matchResults = matchingBooks.map((match, i) => 
-      `Index ${match.index}: ${match.title}\nURL: ${bookUrls[i] || "(not found)"}`
-    ).join('\n');
+      //`Index ${match.index}: ${match.title} URL: ${bookUrls[i] || "(not found)"}`
+      `${bookUrls[i] || "(not found)"}`
+    );
+
+    // return [{ 
+    //   type: "text", 
+    //   text: `Found ${matchingBooks.length} matching book(s) for "${bookTitle}": ${matchResults}` 
+    // }];
 
     return [{ 
       type: "text", 
-      text: `Found ${matchingBooks.length} matching book(s) for "${bookTitle}":\n${matchResults}` 
+      text: `${matchResults}` 
     }];
 
   } catch (error) {

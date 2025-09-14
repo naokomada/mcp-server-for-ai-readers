@@ -45,7 +45,7 @@ npx hardhat compile
 npx hardhat ignition deploy ignition/modules/BookNFT.ts --network sepolia
 
 # add book information
-npx hardhat addBook --network sepolia --title "Book One" --url "https://example.com/book_one"
+npx hardhat addBook --network sepolia --title "Book Two" --url "https://example.com/book_two"
 
 # check books information
 npx hardhat getBookTitles --network sepolia --tokenid 1

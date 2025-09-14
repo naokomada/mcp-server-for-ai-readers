@@ -32,6 +32,7 @@ function parseArgs(raw) {
 
 async function main() {
   const transport = new StreamableHTTPClientTransport(new URL(`${origin}/mcp`));
+  //const transport = new StreamableHTTPClientTransport(new URL(`${origin}/sse`));
 
   const client = new Client(
     {
@@ -48,6 +49,7 @@ async function main() {
   );
 
   console.log("Connecting to", `${origin}/mcp`);
+  //console.log("Connecting to", `${origin}/sse`);
   await client.connect(transport);
   console.log("Connected", client.getServerCapabilities());
 

@@ -4,12 +4,10 @@ import { mainnet, sepolia } from 'viem/chains';
 export type McpTextContent = { type: "text"; text: string };
 
 /**
- * NFTコントラクトアドレスとトークンIDを受け取り、MCPのcontent形式（text）でNFT情報を返す
- * @param contractAddress - NFTコントラクトのアドレス
- * @param tokenId - 取得したいNFTのトークンID
- * @returns Promise<McpTextContent[]> - NFT情報をMCPテキストコンテンツ形式で返却
+ * コントラクトから本のタイトル一覧を取得して返す
+ * @returns Promise<string[]> - 本のタイトル配列
  */
-export async function fetchAllBookTitles(): Promise<McpTextContent[]> {
+export async function fetchAllBookTitles(): Promise<string[]> {
   console.log(`[fetchAllBookTitles] Called`);
 
   try {
@@ -21,7 +19,6 @@ export async function fetchAllBookTitles(): Promise<McpTextContent[]> {
     const contractAddress: `0x${string}` = process.env.BOOK_NFT_CONTRACT_ADDRESS as `0x${string}`;
     console.log(`[fetchAllBookTitles] Using contract address: ${contractAddress}`);
 
-    // コントラクトから本のタイトルのリストを取得する
     const resAllTitles = await client.readContract({
       address: contractAddress,
       abi: [
@@ -38,19 +35,16 @@ export async function fetchAllBookTitles(): Promise<McpTextContent[]> {
     }) as string[];
 
     console.log(`[fetchAllBookTitles] All book titles: ${resAllTitles.join(", ")}`);
-    
-    // resAllTitlesをそのまま返却
-    return resAllTitles.map(title => ({ type: "text", text: title }));
+    return resAllTitles;
     
   } catch (error) {
     console.error(`[fetchAllBookTitles] Error occurred:`, error);
-    const errorText = `NFT search failed: ${error instanceof Error ? error.message : 'Unknown error'}`;
-    return [{ type: "text", text: errorText }];
+    return [];
   }
 }
 
 // 個別の本のNFTの所在（URLを返却する）
-export async function fetchBookURL(tokenId: bigint): Promise<McpTextContent[]> {
+export async function fetchBookURL(tokenId: bigint): Promise<string> {
   console.log(`[fetchBookURL] Called with tokenId: ${tokenId}`);
 
   try {
@@ -79,14 +73,10 @@ export async function fetchBookURL(tokenId: bigint): Promise<McpTextContent[]> {
     }) as string;
 
     console.log(`[fetchBookURL] Book URL for tokenId ${tokenId}: ${bookUrl}`);
-    
-    // URLを返却
-    return [{ type: "text", text: bookUrl }];
+    return bookUrl;
     
   } catch (error) {
     console.error(`[fetchBookURL] Error occurred:`, error);
-    const errorText = `Failed to fetch book URL for tokenId ${tokenId}: ${error instanceof Error ? error.message : 'Unknown error'}`;
-    
-    return [{ type: "text", text: errorText }];
+    return "";
   }
 }

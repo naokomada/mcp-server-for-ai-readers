@@ -15,15 +15,15 @@ export async function searchBooks(bookTitle: string): Promise<McpTextContent[]> 
   try {
     const bookTitles = await fetchAllBookTitles();
 
-    console.log(`[searchBooks] Fetched book titles: ${bookTitles.map(t => t.text).join(", ")}`);
+    console.log(`[searchBooks] Fetched book titles: ${bookTitles.join(", ")}`);
 
     // bookTitleに合致する要素とそのインデックスを検索
     const matchingBooks: { index: number; title: string }[] = [];
     
-    bookTitles.forEach((bookContent, index) => {
+    bookTitles.forEach((title, index) => {
       // 完全一致または部分一致で検索
-      if (bookContent.text.toLowerCase().includes(bookTitle.toLowerCase())) {
-        matchingBooks.push({ index, title: bookContent.text });
+      if (title.toLowerCase().includes(bookTitle.toLowerCase())) {
+        matchingBooks.push({ index, title });
       }
     });
 
@@ -31,18 +31,20 @@ export async function searchBooks(bookTitle: string): Promise<McpTextContent[]> 
     if (matchingBooks.length === 0) {
       return [{ 
         type: "text", 
-        text: `No books found matching "${bookTitle}". Available titles: ${bookTitles.map(t => t.text).join(", ")}` 
+        text: `No books found matching "${bookTitle}". Available titles: ${bookTitles.join(", ")}` 
       }];
     }
 
-    const bookUrls = await Promise.all(matchingBooks.map(match => fetchBookURL(BigInt(match.index))));
+    const bookUrls = await Promise.all(
+      matchingBooks.map(match => fetchBookURL(BigInt(match.index)))
+    );
 
-    console.log(`[searchBooks] Fetched book titles: ${bookTitles.map(t => t.text).join(", ")}`);
+    console.log(`[searchBooks] Fetched book titles: ${bookTitles.join(", ")}`);
     console.log(`[searchBooks] Matching books: ${matchingBooks.map(m => m.title).join(", ")}`);
-    console.log(`[searchBooks] Book URLs: ${bookUrls.map(urls => urls.map(u => u.text).join(", ")).join(" | ")}`);
+    console.log(`[searchBooks] Book URLs: ${bookUrls.join(" | ")}`);
 
     const matchResults = matchingBooks.map((match, i) => 
-      `Index ${match.index}: ${match.title}\nURL: ${bookUrls[i].map(u => u.text).join(", ")}`
+      `Index ${match.index}: ${match.title}\nURL: ${bookUrls[i] || "(not found)"}`
     ).join('\n');
 
     return [{ 

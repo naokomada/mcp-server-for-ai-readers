@@ -31,6 +31,9 @@ node scripts/test-streamable-http-client.mjs https://mcp-server-for-ai-readers.v
 node scripts/test-streamable-http-client.mjs https://mcp-server-for-ai-readers.vercel.app echo '{"message":"gm from cli"}'
 node scripts/test-streamable-http-client.mjs https://mcp-server-for-ai-readers.vercel.app search_books '{"book_title":"book from cli"}'
 
+sepolia
+BookNFTModule#BookNFT - 0x07BaD34F93032cfaD3432DdD1b1BdFC32DDddb7D
+
 contract
 ```bash
 cd contract
@@ -41,5 +44,9 @@ npx hardhat compile
 # deploy contract
 npx hardhat ignition deploy ignition/modules/BookNFT.ts --network sepolia
 
-npx hardhat getState --network base_sepolia --tokenid 1
+# add book information
+npx hardhat addBook --network sepolia --title "Book One" --url "https://example.com/book_one"
+
+# check books information
+npx hardhat getBookTitles --network sepolia --tokenid 1
 ```

@@ -18,7 +18,7 @@ const handler = createMcpHandler(
 
     server.tool(
       "search_books",
-      "description",
+      "Search books content url by book title",
       {
         book_title: z.string(),
       },

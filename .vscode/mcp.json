@@ -1,0 +1,9 @@
+{
+	"servers": {
+		"AIBookCenter": {
+			"url": "https://mcp-server-for-ai-readers.vercel.app/mcp",
+			"type": "http"
+		}
+	},
+	"inputs": []
+}
